@@ -1,0 +1,11 @@
+CREATE TABLE dates (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    date DATE NOT NULL,
+    title VARCHAR(60) NOT NULL
+);
+
+CREATE TABLE actions (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    date_id BIGINT NOT NULL REFERENCES dates(id),
+    action TEXT NOT NULL
+);

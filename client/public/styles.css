@@ -1,0 +1,19 @@
+.strike {
+  text-decoration: line-through;
+}
+
+.bg-note-dark {
+    background-color:yellow ;
+  }
+
+.bg-note-light {
+  background-color: white;
+}
+
+.grab {
+  cursor: grab;
+}
+
+.plain:focus {
+  outline: none;
+}
