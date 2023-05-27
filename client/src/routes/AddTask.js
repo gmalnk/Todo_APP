@@ -12,7 +12,7 @@ const AddTask = () => {
     try {
       if (!(title === "" && actions.length === 0)) {
         event.preventDefault();
-        const response = await AxiosApi.post("/addtodo", {
+        await AxiosApi.post("/", {
           title,
           actions,
         });

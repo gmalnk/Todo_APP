@@ -11,7 +11,7 @@
 }
 
 .grab {
-  cursor: grab;
+  cursor: pointer;
 }
 
 .plain:focus {

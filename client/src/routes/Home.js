@@ -5,16 +5,16 @@ import BlankTodo from "../Components/BlankTodo";
 import Todo from "../Components/Todo";
 
 const Home = () => {
-  const { todos, SetTodos } = useContext(Context);
+  const { todos, SetTodos, deleted } = useContext(Context);
 
   useEffect(() => {
     const fetchTodoList = async () => {
       const response = await AxiosApi.get("/");
-      console.log(response);
+      // console.log(response);
       SetTodos(response.data.data.todolist);
     };
     fetchTodoList();
-  }, []);
+  }, [deleted]);
 
   const todolistComponents = () => {
     const length = todos.length;
@@ -24,8 +24,8 @@ const Home = () => {
 
     if (length === 0) {
       return (
-        <div key={1} className="row ">
-          <BlankTodo key={-1} />
+        <div key={-2436} className="row ">
+          <BlankTodo key={-54} />
           <div className="col mt-4"></div>
           <div className="col mt-4"></div>
           <div className="col mt-4"></div>
@@ -57,7 +57,7 @@ const Home = () => {
         element++;
       }
       todoComponnet.push(
-        <div key={1} className="row ">
+        <div key={i} className="row ">
           {singleTodo}
         </div>
       );
@@ -66,7 +66,7 @@ const Home = () => {
   };
 
   return (
-    <div key={1} className="container-fluid ">
+    <div key={-435} className="container-fluid ">
       {todolistComponents()}
     </div>
   );

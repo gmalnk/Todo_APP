@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 // get all todo list and respective task
-app.get("/api/v1/todo/", async (req, res) => {
+app.get("/api/v2/todo/", async (req, res) => {
   try {
     const response = await db.query(
       "select id, date, title, string_agg(action, ',') as tasks from (select * from dates left join (select date_id, action, done from actions) as act on dates.id =  act.date_id) as temp group by id, date, title order by id desc;"
@@ -29,7 +29,7 @@ app.get("/api/v1/todo/", async (req, res) => {
 });
 
 // create a new task and add it to the data base
-app.post("/api/v1/todo/addtodo", async (req, res) => {
+app.post("/api/v2/todo/", async (req, res) => {
   try {
     const response = await db.query(
       "insert into dates (date, title) values (NOW(), $1) returning *",
@@ -68,7 +68,7 @@ app.post("/api/v1/todo/addtodo", async (req, res) => {
 });
 
 // delete a todo based on its id
-app.delete("/api/v1/todo/delete/:id", async (req, res) => {
+app.delete("/api/v2/todo/:id", async (req, res) => {
   try {
     const response1 = await db.query("delete from actions where date_id = $1", [
       req.params.id,
@@ -88,7 +88,7 @@ app.delete("/api/v1/todo/delete/:id", async (req, res) => {
 });
 
 // update a title todo based on its id
-app.put("/api/v1/todo/updatetitle/:id", async (req, res) => {
+app.put("/api/v2/todo/title/:id", async (req, res) => {
   try {
     const response = await db.query(
       "update dates set date = NOW(), title = $1 where id = $2 returning *",
@@ -105,7 +105,7 @@ app.put("/api/v1/todo/updatetitle/:id", async (req, res) => {
 });
 
 // get a todo task and its corresponding tasks data
-app.get("/api/v1/todo/:id", async (req, res) => {
+app.get("/api/v2/todo/:id", async (req, res) => {
   try {
     // console.log(req.params);
     const datesResponse = await db.query("select * from dates where id = $1 ", [
@@ -130,7 +130,7 @@ app.get("/api/v1/todo/:id", async (req, res) => {
 });
 
 // update action of a todo for given id
-app.put("/api/v1/todo/updateaction/:id", async (req, res) => {
+app.put("/api/v2/todo/task/:id", async (req, res) => {
   try {
     // console.log(req);
     console.log("'" + req.body.action + "'", req.body.done, req.params.id);
@@ -148,7 +148,7 @@ app.put("/api/v1/todo/updateaction/:id", async (req, res) => {
 });
 
 // add a new task for given date_id
-app.post("/api/v1/todo/addtask", async (req, res) => {
+app.post("/api/v2/todo/task", async (req, res) => {
   try {
     const response = await db.query(
       "insert into actions (date_id, action,done) values($1, $2, $3) returning *",
@@ -165,7 +165,7 @@ app.post("/api/v1/todo/addtask", async (req, res) => {
 });
 
 // delete a task based on its id
-app.delete("/api/v1/todo/deletetask/:id", async (req, res) => {
+app.delete("/api/v2/todo/task/:id", async (req, res) => {
   await db.query("delete from actions where id = $1 ", [req.params.id]);
   res.status(200).json({
     status: "success",

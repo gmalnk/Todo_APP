@@ -27,7 +27,7 @@ const UpdateTask = () => {
     };
     fetchTodoDetails();
     // console.log(data);
-  }, []);
+  }, [id]);
 
   const handleSave = () => {
     handleTitle();
@@ -41,7 +41,7 @@ const UpdateTask = () => {
 
   const handeEnterKeyOnNewTask = async (value) => {
     // console.log(value);
-    const response = await AxiosApi.post("/addtask", {
+    const response = await AxiosApi.post("/task", {
       action: value,
       date_id: id,
     });
@@ -50,7 +50,7 @@ const UpdateTask = () => {
   };
 
   const handleOnClickCheckBox = async (action) => {
-    await AxiosApi.put(`/updateaction/${action.id}`, {
+    await AxiosApi.put(`/task/${action.id}`, {
       ...action,
       done: !action.done,
     });
@@ -78,25 +78,23 @@ const UpdateTask = () => {
   };
 
   const handleUpdateAction = async (value, item) => {
-    await AxiosApi.put(`/updateaction/${item.id}`, {
+    await AxiosApi.put(`/task/${item.id}`, {
       ...item,
       action: value,
     });
   };
 
   const handleOnClickDeleteTask = async (id) => {
-    AxiosApi.delete(`/deletetask/${id}`);
+    AxiosApi.delete(`/task/${id}`);
     setTasks(
       tasks.filter((action) => {
-        if (action.id != id) {
-          return action;
-        }
+        return action.id !== id;
       })
     );
   };
 
   const handleTitle = async () => {
-    await AxiosApi.put(`/updatetitle/${id}`, {
+    await AxiosApi.put(`/title/${id}`, {
       title: todo.title,
     });
   };
@@ -146,27 +144,39 @@ const UpdateTask = () => {
         </div>
       </div>
       {tasks &&
-        tasks.map((val) => (
-          <div key={val.id} className="row mt-2 mx-5 p-0">
-            <div className="col ">
-              <div className="card">
-                <div className="card-body pt-0 ps-2 pb-0">
+        tasks.map((val) => {
+          return (
+            <div
+              key={val.id}
+              className="row mt-2 mx-5 p-0 hover border border-1 rounded-start"
+            >
+              <div className="col">
+                <span className="float-start">
                   <i
                     className={
                       val.done
-                        ? "fa-solid fa-square-check float-start py-1 px-2 grab"
-                        : "fa-regular fa-square float-start py-1 px-2 grab"
+                        ? "fa-solid fa-square-check  py-2 px-2 grab"
+                        : "fa-regular fa-square  py-2 px-2 grab"
                     }
                     onClick={() => {
                       handleOnClickCheckBox(val);
                     }}
                   ></i>
+                </span>
+                <span
+                  className="float-start p-top-1"
+                  style={{
+                    width: "96%",
+                    padding: "2px 0px 0px 0px",
+                  }}
+                >
                   <input
                     className={
-                      val.done
-                        ? "strike border-0 float-start plain w-100"
-                        : "border-0 float-start plain w-100"
+                      val.done ? "strike border-0  plain" : "border-0  plain "
                     }
+                    style={{
+                      width: "100%",
+                    }}
                     onKeyDown={(event) => {
                       if (event.code === "Enter") {
                         handleUpdateAction(val.action, val);
@@ -177,17 +187,19 @@ const UpdateTask = () => {
                     }}
                     value={val.action}
                   ></input>
+                </span>
+                <span className="float-end py-1 px-2">
                   <i
-                    className="fa-solid fa-xmark grab float-end py-1 px-2"
+                    className="fa-solid fa-xmark grab"
                     onClick={() => {
                       handleOnClickDeleteTask(val.id);
                     }}
                   ></i>
-                </div>
+                </span>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
     </div>
   );
 };

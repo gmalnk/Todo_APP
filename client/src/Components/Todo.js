@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AxiosApi from "../Api/AxiosApi";
+import { Context } from "../Context/Context";
 
 const Todo = (props) => {
   const navigate = useNavigate();
+  const { deleted, setDeleted } = useContext(Context);
 
   const year = props.date.split("-")[0];
   const month = props.date.split("-")[1];
@@ -20,17 +22,11 @@ const Todo = (props) => {
     navigate(`/updatetask/${id}`);
   };
 
-  const handleDeleteTask = async (event, id) => {
+  const handleDeleteTodo = async (event, id) => {
     event.stopPropagation();
     event.preventDefault();
-    const response = await AxiosApi.delete(`/delete/${id}`);
-    // setTodos(
-    //   todos.filter((todo) => {
-    //     return todo.id != id;
-    //   })
-    // );
-    navigate("grsedrfg");
-    navigate("/");
+    const response = await AxiosApi.delete(`/${id}`);
+    setDeleted(!deleted);
   };
 
   return (
@@ -45,7 +41,7 @@ const Todo = (props) => {
           <strong className="">{" " + props.title}</strong>
           <i
             className="fa-solid fa-xmark float-end pt-1"
-            onClick={(event) => handleDeleteTask(event, props.id)}
+            onClick={(event) => handleDeleteTodo(event, props.id)}
           ></i>
         </div>
         <div className="card-body bg-note-light">
